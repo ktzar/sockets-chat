@@ -11,7 +11,8 @@ I plan to implement:
 - Registration
 - Popup windows
 
-To run the server execute
-    node server
+To run the server execute 
+
+`$ node server`
 
 And then you can point your browser to `http://your_local_ip:1080`

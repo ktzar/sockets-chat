@@ -5,13 +5,16 @@ var app = require('http').createServer(handler)
 app.listen(1080);
 
 function handler (req, res) {
+
+    //Dump any existing file in the /static folder
     if (req.url.substr(0,8) == "/static/") {
         var file = req.url;
     }else{
+        //Elsewhere, dump index.html
         var file = 'index.html';
     }
 
-    console.log("output ",__dirname + '/'+file);
+    //Read the desired file and output it
     fs.readFile(__dirname + '/'+file,
         function (err, data) {
             if (err) {
@@ -24,17 +27,20 @@ function handler (req, res) {
     );
 }
 
+//socket.io server
 io.sockets.on('connection', function (socket) {
+    //If the client doesn't set any nickname it'll remain Anonymous
     socket.set('nick', "Anoymous");
     socket.on('msg', function (data) {
         socket.get('nick', function(err, nick) {
+            //Broadcast the message with the nickname
             io.sockets.emit('msg', nick+": "+data);
-            console.log(nick+"Send to all", data);
         });
     });
+    //Someone presents himself
     socket.on('nick', function (nick) {
         socket.set('nick', nick, function(){
-            console.log('Nick set to '+nick);
+            //Show that to the room
             io.sockets.emit('msg', nick+" entered the chat room.");
         });
     });
