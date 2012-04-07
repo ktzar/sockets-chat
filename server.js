@@ -44,4 +44,13 @@ io.sockets.on('connection', function (socket) {
             io.sockets.emit('msg', nick+" entered the chat room.");
         });
     });
+
+    //User disconnects
+    socket.on('disconnect', function () {
+        socket.get('nick', function(err, nick) {
+            io.sockets.emit('msg', nick+" left the chat room.");
+        });
+    });
+
+
 });
