@@ -1,0 +1,11 @@
+body: {
+    font-family: Arial, sans;
+    #aaa;
+}
+#wrapper{
+    background: white;
+    width:60%;
+    margin:0px auto;
+    padding:1em;
+    box-shadow:0px 0px 20px black
+}
