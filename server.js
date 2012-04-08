@@ -32,6 +32,10 @@ io.sockets.on('connection', function (socket) {
     //If the client doesn't set any nickname it'll remain Anonymous
     socket.set('nick', "Anoymous");
     socket.on('msg', function (data) {
+        if (data.length == 0 ) {
+            console.log('Empty message came');
+            return;
+        }
         socket.get('nick', function(err, nick) {
             //Broadcast the message with the nickname
             io.sockets.emit('msg', nick+": "+data);
