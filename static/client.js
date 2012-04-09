@@ -6,13 +6,17 @@ var Chat = function(user_options) {
     //default options
     this.options = {
         nick: 'Anonymous',
-        cb_rx_msg: function(){},
-        cb_user_new: function(){},
-        cb_user_left: function(){}
     };
 
+    var callbacks = ['msg', 'join', 'left', 'list'];
+    for (var i in callbacks) {
+        this.options['_cb_'+callbacks[i]] = function(){};
+    }
+
     //merge options
-    for (var attrname in user_options) { this.options[attrname] = user_options[attrname]; }
+    for (var attrname in user_options) { 
+        this.options[attrname] = user_options[attrname]; 
+    }
 
     //Set the nickname as soon as the connection is ready
     this.socket = io.connect();
@@ -23,10 +27,15 @@ var Chat = function(user_options) {
     this.sendMessage = function(text) {
         _this.socket.emit('msg', text); 
     };
+
     //configure callback
-    this.socket.on('msg', this.options.cb_rx_msg);
-    this.socket.on('new', this.options.cb_user_new);
-    this.socket.on('left', this.options.cb_user_left);
+    for (i=0;i<callbacks.length;i++) {
+        var callback = callbacks[i];
+        if ( typeof this.options["_cb_"+callback] == "function" ) {
+            var _callback = this.options["_cb_"+callback];
+            this.socket.on(callback,   _callback);
+        }
+    }
 }
 
 
@@ -51,6 +60,14 @@ function updateBox (text) {
     output.scrollTop = output.scrollHeight;
 }
 
+function contactList(contacts) {
+    console.log('contactList', contacts);
+    $('#contactlist ul').html('');
+    for (contact in contacts) {
+        $('#contactlist ul').append('<li>'+contacts[contact]+'</li>');
+    }
+}
+
 //onLoad
 $(function(){
     //ask for a name
@@ -68,10 +85,11 @@ $(function(){
     //instantiate Chat class
     var chat = new Chat(
         {
-            'nick':name,
-            cb_rx_msg: receiveMessage,
-            cb_user_new: userNew,
-            cb_user_left: userLeft
+            'nick':     name,
+            _cb_msg:     receiveMessage,
+            _cb_join:    userNew,
+            _cb_left:    userLeft,
+            _cb_list:    contactList
         }
     );
 

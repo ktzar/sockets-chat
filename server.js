@@ -27,9 +27,13 @@ function handler (req, res) {
     );
 }
 
+var contacts = [];
+
 //socket.io server
 io.sockets.on('connection', function (socket) {
     //If the client doesn't set any nickname it'll remain Anonymous
+    var _this = this;
+
     socket.set('nick', "Anoymous");
     socket.on('msg', function (data) {
         if (data.length == 0 ) {
@@ -41,21 +45,30 @@ io.sockets.on('connection', function (socket) {
             console.log("Send ",nick, data);
             io.sockets.emit('msg', {nick:nick,text:data});
         });
+        console.log(contacts);
     });
     //Someone presents himself
     socket.on('nick', function (nick) {
         socket.set('nick', nick, function(){
             //Show that to the room
+            contacts.push(nick);
             console.log(nick+" joined");
-            io.sockets.emit('new', nick);
+            io.sockets.emit('join', nick);
+            io.sockets.emit('list', contacts);
         });
     });
 
     //User disconnects
     socket.on('disconnect', function () {
         socket.get('nick', function(err, nick) {
+            //delete this user from contact list
+            var index = contacts.indexOf(nick);
+            if ( index != -1 ) {
+                contacts.splice(index, 1);
+            }
             console.log(nick+" left");
             io.sockets.emit('left', nick);
+            io.sockets.emit('list', contacts);
         });
     });
 
