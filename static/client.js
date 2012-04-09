@@ -6,7 +6,9 @@ var Chat = function(user_options) {
     //default options
     this.options = {
         nick: 'Anonymous',
-        cb_rx_msg: function(){}
+        cb_rx_msg: function(){},
+        cb_user_new: function(){},
+        cb_user_left: function(){}
     };
 
     //merge options
@@ -23,12 +25,28 @@ var Chat = function(user_options) {
     };
     //configure callback
     this.socket.on('msg', this.options.cb_rx_msg);
+    this.socket.on('new', this.options.cb_user_new);
+    this.socket.on('left', this.options.cb_user_left);
 }
 
 
 //Add the incoming text in the textarea and keep it scrolled down
-function receiveMessage(text) {
-    $('#output').val($('#output').val()+"\n"+text);
+function receiveMessage(message) {
+    updateBox("<span class='nick'>"+message.nick+"</span><span class='text'>"+message.text+"</span>");
+}
+
+//Add the incoming text in the textarea and keep it scrolled down
+function userNew(nick) {
+    updateBox("<span class='status'>"+nick+" new.</span>");
+}
+
+//Add the incoming text in the textarea and keep it scrolled down
+function userLeft(nick) {
+    updateBox("<span class='status'>"+nick+" left.</span>");
+}
+
+function updateBox (text) {
+    $('#output').html($('#output').html()+"<div class='message'>"+text+"</div>");
     output = $('#output')[0];
     output.scrollTop = output.scrollHeight;
 }
@@ -46,13 +64,17 @@ $(function(){
         //Don't do anything else, chat won't work
         return;
     }
+
     //instantiate Chat class
     var chat = new Chat(
         {
             'nick':name,
-            cb_rx_msg: receiveMessage
+            cb_rx_msg: receiveMessage,
+            user_new: userNew,
+            user_left: userLeft
         }
     );
+
     //Detect keystrokes, send message on Enter
     $('#input').keydown(function(e){
         if ( e.keyCode == 13 ) {
