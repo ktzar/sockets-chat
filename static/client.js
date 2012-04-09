@@ -37,12 +37,12 @@ function receiveMessage(message) {
 
 //Add the incoming text in the textarea and keep it scrolled down
 function userNew(nick) {
-    updateBox("<span class='status'>"+nick+" new.</span>");
+    updateBox("<span class='status'>"+nick+" has joined.</span>");
 }
 
 //Add the incoming text in the textarea and keep it scrolled down
 function userLeft(nick) {
-    updateBox("<span class='status'>"+nick+" left.</span>");
+    updateBox("<span class='status'>"+nick+" has left.</span>");
 }
 
 function updateBox (text) {
@@ -55,7 +55,7 @@ function updateBox (text) {
 $(function(){
     //ask for a name
     var name = null, i = 0;
-    while (name == null || i > 5) {
+    while ( name == null || name.length == 0 || i > 5) {
         name = prompt("What's your name");
         i++;
     }
@@ -70,8 +70,8 @@ $(function(){
         {
             'nick':name,
             cb_rx_msg: receiveMessage,
-            user_new: userNew,
-            user_left: userLeft
+            cb_user_new: userNew,
+            cb_user_left: userLeft
         }
     );
 
