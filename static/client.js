@@ -60,6 +60,7 @@ function updateBox (text) {
     output.scrollTop = output.scrollHeight;
 }
 
+//Called when a user appears or leaves the room
 function contactList(contacts) {
     console.log('contactList', contacts);
     $('#contactlist ul').html('');
@@ -83,15 +84,13 @@ $(function(){
     }
 
     //instantiate Chat class
-    var chat = new Chat(
-        {
-            'nick':     name,
-            _cb_msg:     receiveMessage,
-            _cb_join:    userNew,
-            _cb_left:    userLeft,
-            _cb_list:    contactList
-        }
-    );
+    var chat = new Chat({
+        'nick':     name,
+        _cb_msg:     receiveMessage,
+        _cb_join:    userNew,
+        _cb_left:    userLeft,
+        _cb_list:    contactList
+    });
 
     //Detect keystrokes, send message on Enter
     $('#input').keydown(function(e){
