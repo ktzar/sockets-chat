@@ -13,6 +13,6 @@ I plan to implement:
 
 To run the server execute 
 
-`$ node server`
+`$ node server.js`
 
 And then you can point your browser to `http://your_local_ip:1080`
