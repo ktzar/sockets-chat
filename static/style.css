@@ -8,6 +8,7 @@ body: {
     margin:0px auto;
     padding:1em;
     box-shadow:0px 0px 20px black
+    font-size:12px;
 }
 
 #contactlist{
@@ -15,14 +16,16 @@ body: {
     height: 20em;
     overflow: auto;
     border:1px solid grey;
-    font-size:10px;
-    width: 20%;
+    width: 40%;
+}
+#contactlist ul{
+    list-style: none;
+    padding-left:0.5em;
 }
 #output{
     height: 20em;
     overflow: auto;
     border:1px solid grey;
-    font-size:10px;
 }
 #output .status{
     font-style: italic;
