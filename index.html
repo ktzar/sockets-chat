@@ -7,19 +7,25 @@
 <script src="/socket.io/socket.io.js"></script>
 <script src="/static/chat.js"></script>
 <script src="/static/client.js"></script>
-<link rel="stylesheet" href="/static/style.css" type="text/css" media="screen" charset="utf-8">
+<link rel="stylesheet" href="/static/style.css" type="text/css" media="screen" charset="utf-8"></link>
 </head>
 <body>
     <div id="wrapper">
-        <h1 id="heading">Chat</h1>
-        <div id="contactlist">
-            <h2>Contact list</h2>
-            <ul>
-            </ul>
+        <h1 id="heading">Websockets Chat</h1>
+        <div id="chatwindow">
+            <div id="contactlist">
+                <h2>Contact list</h2>
+                <ul>
+                </ul>
+            </div>
+            <div id="output">
+                <h2>Room</h2>
+            </div>
         </div>
-        <div id="output"></div>
-        <input type="text" id="message"/><button id="bt_send">Send</button><br/>
-        <input type="text" id="nick"/><button id="bt_nick">Change nick</button>
+        <div id="controls">
+            <input type="text" id="message"/><button id="bt_send">Send</button><br/>
+            <input type="text" id="nick"/><button id="bt_nick">Change nick</button>
+        </div>
     </div>
 </body>
 </html>

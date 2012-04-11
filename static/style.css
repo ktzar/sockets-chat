@@ -1,16 +1,31 @@
-body: {
+@import url("font-awesome.css");
+body{
     font-family: Arial, sans;
-    #aaa;
+    background: #7B7F63;
+    color: #black;
+}
+h1{
+    background: #11A883;
+    color: white;
+}
+h1,h2{
+    background: #11A883;
+    color: white;
+    padding:0.25em;
+    margin:0px;
 }
 #wrapper{
     background: white;
     width:60%;
     margin:0px auto;
-    padding:1em;
-    box-shadow:0px 0px 20px black
+    padding:0em;
+    box-shadow:0px 0px 20px #000;
     font-size:12px;
 }
 
+#chatwindow{
+    margin: 1em 1em 0em;
+}
 #contactlist{
     float: right;
     height: 20em;
@@ -21,6 +36,7 @@ body: {
 #contactlist ul{
     list-style: none;
     padding-left:0.5em;
+    margin: 0px;
 }
 #output{
     height: 20em;
@@ -40,6 +56,9 @@ body: {
     content: ': ';
 }
 
+#controls{
+    margin: 0em 1em;
+}
 #input {
     border: 1px solid grey;
     margin: 0px;

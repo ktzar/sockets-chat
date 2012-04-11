@@ -69,48 +69,55 @@ io.sockets.on('connection', function (socket) {
             console.log("Send ",nick, data);
             io.sockets.emit('msg', {nick:nick,text:data});
         });
-        console.log(contacts);
     });
 
     //Someone presents himself
     socket.on('nick', function (new_nick) {
         socket.get('nick', function(err, old_nick) {
             
+            //can be set to false if any error check is not passed
+            var new_name_ok = true;
+
             if ( err ) {
                 console.error('Something wrong happened, user without nick');
-                return;
+                new_name_ok = false;
             }
 
             //Is there any changes at all?
             if ( old_nick == new_nick ) {
-                return;
+                new_name_ok = false;
             }
 
             //If the username exists already, don't change it
             for ( contact in contacts ) {
                 if ( contacts[contact] == new_nick ) {
                     //contact already exists
-                    return;
+                    new_name_ok = false;
                 }
             }
 
-            //store the new nick
-            socket.set('nick', new_nick, function(){
-                nick = new_nick;
+            if ( new_name_ok == false ) {
+                //reset old nick
+                socket.emit('nick', old_nick);
+            } else {
+                //store the new nick
+                socket.set('nick', new_nick, function(){
+                    nick = new_nick;
 
-                console.log(old_nick+ " is now known as " + new_nick);
+                    console.log(old_nick+ " is now known as " + new_nick);
 
-                //set the new name to the client
-                socket.emit('nick', new_nick);
+                    //set the new name to the client
+                    socket.emit('nick', new_nick);
 
-                //Store in the client list
-                contacts[socket.id] = new_nick;
+                    //Store in the client list
+                    contacts[socket.id] = new_nick;
 
-                //Show that to the room
-                io.sockets.emit('nickchange', {new_nick:new_nick, old_nick:old_nick});
+                    //Show that to the room
+                    io.sockets.emit('nickchange', {new_nick:new_nick, old_nick:old_nick});
 
-                refreshContactList();
-            });
+                    refreshContactList();
+                });
+            }
         });
     });
 

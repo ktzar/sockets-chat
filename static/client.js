@@ -31,7 +31,8 @@ function contactList(contacts) {
     console.log('contactList', contacts);
     $('#contactlist ul').html('');
     for (contact in contacts) {
-        $('#contactlist ul').append('<li>'+contacts[contact]+'</li>');
+        console.log( 'adding ', contact);
+        $('#contactlist ul').append('<li><i class="icon-user"></i>'+contacts[contact]+'</li>');
     }
 }
 
