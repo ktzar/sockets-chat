@@ -59,8 +59,7 @@ h1,h2{
 #controls{
     margin: 0em 1em;
 }
-#input {
+input {
     border: 1px solid grey;
     margin: 0px;
-    width: 100%;
 }
