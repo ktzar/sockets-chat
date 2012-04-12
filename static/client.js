@@ -32,7 +32,7 @@ function contactList(contacts) {
     $('#contactlist ul').html('');
     for (contact in contacts) {
         console.log( 'adding ', contact);
-        $('#contactlist ul').append('<li><i class="icon-user"></i>'+contacts[contact]+'</li>');
+        $('#contactlist ul').append('<li data-id="'+contact+'"><i class="icon-user"></i><span class="name">'+contacts[contact]+'</span></li>');
     }
 }
 
@@ -46,6 +46,11 @@ function sendMessage () {
     console.log('send '+text);
     chat.sendMessage(text);
     $('#message').val('');
+}
+
+function sendPrivate (to, message) {
+    console.log('sendPrivate', to, message);
+    //chat.sendPrivate(to, message);
 }
 
 //instantiate Chat class
@@ -75,6 +80,10 @@ $(function(){
 
     $('#bt_nick').click(function(){
         chat.setNick($('#nick').val());
+    });
+
+    $('#contactlist').on('dblclick', 'li', function(e){
+        new Private($(this).attr('data-id'), $(this).find('.name').html());
     });
 
 });

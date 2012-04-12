@@ -81,6 +81,9 @@ input {
 .private h2{
     font-size: 10px;
 }
+.private h2 i{
+    float: right;
+}
 .private input{
     border:0px;
 }
