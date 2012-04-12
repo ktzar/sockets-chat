@@ -4,10 +4,6 @@ body{
     background: #7B7F63;
     color: #black;
 }
-h1{
-    background: #11A883;
-    color: white;
-}
 h1,h2{
     background: #11A883;
     color: white;
@@ -62,4 +58,8 @@ h1,h2{
 input {
     border: 1px solid grey;
     margin: 0px;
+}
+#about{
+    text-align: center;
+    padding:0.5em;
 }
