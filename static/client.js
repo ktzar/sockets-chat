@@ -36,11 +36,14 @@ function contactList(contacts) {
     }
 }
 
+//Function that will be called when a new message arrives in the room
 function updateBox (text) {
     $('#output').html($('#output').html()+"<div class='message'>"+text+"</div>");
     output = $('#output')[0];
     output.scrollTop = output.scrollHeight;
 }
+
+//Send a message to the room
 function sendMessage () {
     text = $('#message').val();
     console.log('send '+text);
@@ -48,6 +51,7 @@ function sendMessage () {
     $('#message').val('');
 }
 
+//Send a private message to a specific user
 function sendPrivate (to, message) {
     console.log('sendPrivate', to, message);
     //chat.sendPrivate(to, message);

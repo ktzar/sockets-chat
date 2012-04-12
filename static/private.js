@@ -17,6 +17,7 @@ var Private = function (user_id, name)
     };
 
 
+    //html template for the private chat window
     this.panel = jQuery(
     '<div class="private" data-user="'+this.user_id+'">'+
     '   <h2>Chat with <span class="username">'+name+'</span>'+
@@ -26,7 +27,15 @@ var Private = function (user_id, name)
     '   <div class="conversation"></div>'+
     '   <input type="text"></div>'+
     '</div>');
-    this.panel.css("left",(private_windows.length*170)+"px");
+
+    private_windows[user_id] = this;
+
+    //align all the existing windows
+    var i = 0;
+    for ( a_window in private_windows ) {
+        private_windows[a_window].panel.css("left",(i*170)+"px");
+        i++;
+    }
 
     this.panel.on('keydown', 'input', function(e){
         if (e.keyCode == 13) {
@@ -39,12 +48,5 @@ var Private = function (user_id, name)
     });
     $('body').append(this.panel);
 
-    private_windows[user_id] = this;
-    //align all the existing windows
-    var i = 0;
-    for ( a_window in private_windows ) {
-        private_windows[a_window].panel.css("left",(i*170)+"px");
-        i++;
-    }
     return true;
 }
