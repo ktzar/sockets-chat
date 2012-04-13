@@ -36,9 +36,9 @@ var Private = function (user_id, name)
     this.panel = jQuery(
     '<div class="private" data-user="'+this.user_id+'">'+
     '   <h2>Chat with <span class="username">'+name+'</span>'+
+    '       <i data-action="close" class="icon-remove">&nbsp;</i>'+
     '       <i data-action="minimise" class="icon-chevron-down">&nbsp;</i>'+
     '       <i data-action="restore" class="icon-chevron-up">&nbsp;</i>'+
-    '       <i data-action="close" class="icon-remove">&nbsp;</i>'+
     '</h2>'+
     '   <div class="conversation"></div>'+
     '   <input type="text"></div>'+
@@ -48,8 +48,10 @@ var Private = function (user_id, name)
 
     //align all the existing windows
     var i = 0;
+    var width = this.panel.width();
+    var margin = 10;
     for ( a_window in private_windows ) {
-        private_windows[a_window].panel.css("left",(i*170)+"px");
+        private_windows[a_window].panel.css("left",(i*(width+margin))+"px");
         i++;
     }
 

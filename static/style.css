@@ -4,10 +4,6 @@ body{
     background: #7B7F63;
     color: #black;
 }
-h1{
-    background: #11A883;
-    color: white;
-}
 h1,h2{
     background: #11A883;
     color: white;
@@ -63,7 +59,10 @@ input {
     border: 1px solid grey;
     margin: 0px;
 }
-
+#about{
+    text-align: center;
+    padding:0.5em;
+}
 
 .private{
     position: fixed;
@@ -74,11 +73,11 @@ input {
     background: white;
     box-shadow:0px 0px 20px #000;
 }
-.private.minimised{
-    height: 30px;
+.private .icon-chevron-up{
+    display: none;
 }
 .private .conversation{
-    height: 170px;
+    height: 160px;
     background: #ddd;
 }
 .private.minimised .conversation{
@@ -92,4 +91,13 @@ input {
 }
 .private input{
     border:0px;
+}
+.private.minimised{
+    height: 30px;
+}
+.private.minimised .icon-chevron-down{
+    display: none;
+}
+.private.minimised .icon-chevron-up{
+    display: block;
 }
