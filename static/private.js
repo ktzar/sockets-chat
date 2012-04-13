@@ -60,14 +60,6 @@ var Private = function (user_id, nick)
 
     private_windows[user_id] = this;
 
-    //align all the existing windows
-    var i = 0;
-    var width = this.panel.width();
-    var margin = 10;
-    for ( a_window in private_windows ) {
-        private_windows[a_window].panel.css("left",(i*(width+margin))+"px");
-        i++;
-    }
 
     this.panel.find('h2').on('click', 'i', function(){
         var action = ($(this).attr('data-action'));
@@ -100,5 +92,13 @@ var Private = function (user_id, nick)
     });
     $('body').append(this.panel);
 
+    //align all the existing windows
+    var i = 0;
+    var width = this.panel.width();
+    var margin = 10;
+    for ( a_window in private_windows ) {
+        private_windows[a_window].panel.css("left",(i*(width+margin))+"px");
+        i++;
+    }
     return true;
 }

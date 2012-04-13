@@ -1,7 +1,7 @@
 //Chat Class
 var Chat = function(user_options) {
 
-    var _this = this;
+    var that = this;
 
     //default options
     this.options = {
@@ -23,17 +23,17 @@ var Chat = function(user_options) {
 
     //message sending function
     this.sendMessage = function(text) {
-        _this.socket.emit('msg', text); 
+        that.socket.emit('msg', text); 
     };
 
     //private message sending function
     this.sendPrivate = function(to, message) {
-        _this.socket.emit('private', {to:to, message:message}); 
+        that.socket.emit('private', {to:to, message:message}); 
     };
 
     //change nick 
     this.setNick = function(nick) {
-        _this.socket.emit('nick', nick); 
+        that.socket.emit('nick', nick); 
     };
 
     //configure callback
