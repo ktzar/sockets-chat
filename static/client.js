@@ -26,6 +26,11 @@ function nickChange(nicks) {
     updateBox("<span class='status'>"+nicks.old_nick + ' is now known as '+nicks.new_nick+"</span>");
 }
 
+//Incoming private message
+function privateIn(data) {
+    console.log('privateIn', data);
+}
+
 //Called when a user appears or leaves the room
 function contactList(contacts) {
     console.log('contactList', contacts);
@@ -43,6 +48,7 @@ function updateBox (text) {
     output.scrollTop = output.scrollHeight;
 }
 
+
 //Send a message to the room
 function sendMessage () {
     text = $('#message').val();
@@ -53,8 +59,7 @@ function sendMessage () {
 
 //Send a private message to a specific user
 function sendPrivate (to, message) {
-    console.log('sendPrivate', to, message);
-    //chat.sendPrivate(to, message);
+    chat.sendPrivate(to, message);
 }
 
 //instantiate Chat class
@@ -64,7 +69,8 @@ var chat = new Chat({
     _cb_left:       userLeft,
     _cb_list:       contactList,
     _cb_nick:       nickSet,
-    _cb_nickchange: nickChange
+    _cb_nickchange: nickChange,
+    _cb_privatein:    privateIn
 });
 
 //onLoad

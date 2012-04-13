@@ -7,7 +7,7 @@ var Chat = function(user_options) {
     this.options = {
     };
 
-    var callbacks = ['msg', 'join', 'left', 'list', 'nick', 'nickchange'];
+    var callbacks = ['msg', 'join', 'left', 'list', 'nick', 'nickchange', 'privatein'];
     for (var i in callbacks) {
         this.options['_cb_'+callbacks[i]] = function(){};
     }
@@ -26,6 +26,11 @@ var Chat = function(user_options) {
         _this.socket.emit('msg', text); 
     };
 
+    //private message sending function
+    this.sendPrivate = function(to, message) {
+        _this.socket.emit('private', {to:to, message:message}); 
+    };
+
     //change nick 
     this.setNick = function(nick) {
         _this.socket.emit('nick', nick); 
@@ -37,6 +42,14 @@ var Chat = function(user_options) {
         if ( typeof this.options["_cb_"+callback] == "function" ) {
             var _callback = this.options["_cb_"+callback];
             this.socket.on(callback,   _callback);
+            this.socket.on(
+                callback,
+                function(name){
+                    return function(){
+                        console.log('received '+name);   
+                    };
+                }(callback)
+            );
         }
     }
 }

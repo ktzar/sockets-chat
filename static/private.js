@@ -8,7 +8,7 @@ var Private = function (user_id, name)
         return false;
     }
     var that = this;
-    this.user_id = parseInt(user_id);
+    this.user_id = user_id;
 
     //functions
     this.msg_received = function(message){

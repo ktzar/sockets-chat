@@ -34,12 +34,7 @@ var contacts = {};
 var user_count = 0;
 function refreshContactList()
 {
-    var contact_list = [];
-
-    for ( contact in contacts ) {
-        contact_list.push(contacts[contact]);
-    }
-    io.sockets.emit('list', contact_list);
+    io.sockets.emit('list', contacts);
 }
 
 //socket.io server
@@ -68,6 +63,35 @@ io.sockets.on('connection', function (socket) {
             //Broadcast the message with the nickname
             console.log("Send ",nick, data);
             io.sockets.emit('msg', {nick:nick,text:data});
+        });
+    });
+
+    socket.on('private', function (data) {
+        if (data == undefined || data.length == 0 ) {
+            console.log('Empty message');
+            return;
+        }
+        console.log('private', data);
+        var to      = data.to;
+        var message = data.message;
+
+        //confirm that the user_id exists
+        
+        if ( typeof contacts[to] == "undefined" ) {
+            console.log('private to unexisting user');
+            console.log(to, contacts);
+            return;
+        }
+
+        socket.get('nick', function(err, nick) {
+            //Broadcast the message with the nickname
+            console.log("Send private from "+nick+" to "+to, data);
+
+            io.sockets.socket(to).emit('privatein', {
+                from: socket.id,
+                name: nick,
+                message: message
+            });
         });
     });
 
