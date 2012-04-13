@@ -1,8 +1,7 @@
 //Add the incoming text in the textarea and keep it scrolled down
 function receiveMessage(message) {
     //escape the text
-    var text = $('<div/>').text(message.text).html();
-    updateBox("<span class='nick'>"+message.nick+"</span><span class='text'>"+text+"</span>");
+    updateBox("<span class='nick'>"+message.nick+"</span><span class='text'>"+cleanText(message.text)+"</span>");
 }
 
 //Add the incoming text in the textarea and keep it scrolled down
@@ -29,6 +28,12 @@ function nickChange(nicks) {
 //Incoming private message
 function privateIn(data) {
     console.log('privateIn', data);
+    //TODO I'd like Private to have "static methods " to check if a window for a certain user exists
+    if ( typeof private_windows[data.from] == "undefined" ) {
+        //new chat, we have to create it
+        new Private(data.from, data.name);
+    }
+    private_windows[data.from].incomingMessage(cleanText(data.message));
 }
 
 //Called when a user appears or leaves the room
@@ -62,6 +67,10 @@ function sendPrivate (to, message) {
     chat.sendPrivate(to, message);
 }
 
+function cleanText(text) {
+    return $('<div/>').text(text).html();
+}
+
 //instantiate Chat class
 var chat = new Chat({
     _cb_msg:        receiveMessage,
@@ -93,6 +102,7 @@ $(function(){
     });
 
     $('#contactlist').on('dblclick', 'li', function(e){
+        //TODO I'd like Private to have "static methods " to check if a window for a certain user exists
         new Private($(this).attr('data-id'), $(this).find('.name').html());
     });
 

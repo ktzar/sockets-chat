@@ -2,13 +2,14 @@
 var private_windows = {};
 
 //Private chat class
-var Private = function (user_id, name)
+var Private = function (user_id, nick)
 {
     if ( typeof private_windows[user_id] != "undefined" ) {
         return false;
     }
     var that = this;
     this.user_id = user_id;
+    this.nick = nick;
 
     //functions
     this.msg_received = function(message){
@@ -26,23 +27,36 @@ var Private = function (user_id, name)
         this.panel.removeClass('minimised');
     }
 
+    //Incoming message
+    this.incomingMessage = function(text) {
+        console.log(text);
+        this.updateBox("<span class='nick'>"+this.nick+": </span><span class='text'>"+text+"</span>");
+                
+    }
+
     //Close the window and remove references in the DOM
     this.close = function(){
         delete private_windows[this.user_id];
         this.panel.remove();
     }
 
+    this.updateBox = function(text) {
+        console.log('updateBox', text);
+        var conversation = this.panel.find('.conversation');
+        conversation.html(conversation.html()+"<br/>"+text);
+    };
+
     //html template for the private chat window
     this.panel = jQuery(
-    '<div class="private" data-user="'+this.user_id+'">'+
-    '   <h2>Chat with <span class="username">'+name+'</span>'+
-    '       <i data-action="close" class="icon-remove">&nbsp;</i>'+
-    '       <i data-action="minimise" class="icon-chevron-down">&nbsp;</i>'+
-    '       <i data-action="restore" class="icon-chevron-up">&nbsp;</i>'+
-    '</h2>'+
-    '   <div class="conversation"></div>'+
-    '   <input type="text"></div>'+
-    '</div>');
+'<div class="private" data-user="'+this.user_id+'">'+
+'   <h2>Chat with <span class="username">'+this.nick+'</span>'+
+'       <i data-action="close" class="icon-remove">&nbsp;</i>'+
+'       <i data-action="minimise" class="icon-chevron-down">&nbsp;</i>'+
+'       <i data-action="restore" class="icon-chevron-up">&nbsp;</i>'+
+'</h2>'+
+'   <div class="conversation"></div>'+
+'   <input type="text"></div>'+
+'</div>');
 
     private_windows[user_id] = this;
 
@@ -77,7 +91,10 @@ var Private = function (user_id, name)
             console.log('Message for '+that.user_id);
             console.log(e.keyCode);
             //call the callback with what's inside the input and clear it
-            sendPrivate(that.user_id, that.panel.find('input').val());
+            var text = that.panel.find('input').val();
+            sendPrivate(that.user_id, text);
+            that.updateBox("<span class='nick'>You: </span><span class='text'>"+cleanText(text)+"</span>");
+            //clean panel
             that.panel.find('input').val('');
         }
     });

@@ -79,6 +79,8 @@ input {
 .private .conversation{
     height: 160px;
     background: #ddd;
+    overflow:auto;
+    font-size:10px;
 }
 .private.minimised .conversation{
     height: 0px;
