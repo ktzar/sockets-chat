@@ -104,6 +104,9 @@ input {
 .private input{
     border:0px;
 }
+.private.minimised .input{
+    height: 0px;
+}
 .private.minimised{
     height: 30px;
 }

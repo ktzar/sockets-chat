@@ -92,6 +92,9 @@ var Private = function (user_id, nick)
     });
     $('body').append(this.panel);
 
+    //Set focus in the textfield
+    this.panel.find('input').focus();
+
     //align all the existing windows
     var i = 0;
     var width = this.panel.width();
