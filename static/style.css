@@ -35,7 +35,7 @@ h1,h2{
     margin: 0px;
 }
 #output{
-    height: 20em;
+    height: 17.5em;
     overflow: auto;
     border:1px solid grey;
 }
