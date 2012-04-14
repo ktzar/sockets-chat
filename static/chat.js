@@ -3,6 +3,15 @@ var Chat = function(user_options) {
 
     var that = this;
 
+    //check for HTML5 Storage
+    this.hasLocalStorage = function supports_html5_storage() {
+      try {
+        return 'localStorage' in window && window['localStorage'] !== null;
+      } catch (e) {
+        return false;
+      }
+    }();
+
     //default options
     this.options = {
     };
@@ -34,7 +43,18 @@ var Chat = function(user_options) {
     //change nick 
     this.setNick = function(nick) {
         that.socket.emit('nick', nick); 
+        if ( this.hasLocalStorage ) {
+            console.log('store nick: ', nick);
+            localStorage.setItem("nick", nick);
+        }
     };
+
+    //Set the stored nick if it's been stored
+    if (this.hasLocalStorage) {
+        var nick = localStorage.getItem("nick");
+        console.log('retrieve nick: ', nick);
+        this.setNick(nick);
+    }
 
     //configure callback
     for (i=0;i<callbacks.length;i++) {
