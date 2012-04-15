@@ -43,16 +43,14 @@ io.sockets.on('connection', function (socket) {
     //If the client doesn't set any nickname it'll remain Anonymous
     var _this = this;
 
-    var nick = "Anonymous_"+user_count++;
+    this.nick = "Anonymous_"+user_count++;
 
-    //set nickname in this socket
-    socket.set('nick', nick);
     //Set nickname to the user
-    socket.emit('nick', nick);
+    socket.emit('nick', this.nick);
     //show to the room
-    io.sockets.emit('join', nick);
+    io.sockets.emit('join', this.nick);
 
-    contacts[socket.id] = nick;
+    contacts[socket.id] = this.nick;
     refreshContactList();
 
     socket.on('msg', function (data) {
@@ -60,11 +58,9 @@ io.sockets.on('connection', function (socket) {
             console.log('Empty message');
             return;
         }
-        socket.get('nick', function(err, nick) {
-            //Broadcast the message with the nickname
-            console.log("Send ",nick, data);
-            io.sockets.emit('msg', {nick:nick,text:data});
-        });
+        //Broadcast the message with the nickname
+        console.log("Send ",_this.nick, data);
+        io.sockets.emit('msg', {nick:_this.nick,text:data});
     });
 
     socket.on('private', function (data) {
@@ -84,66 +80,58 @@ io.sockets.on('connection', function (socket) {
             return;
         }
 
-        socket.get('nick', function(err, nick) {
             //Broadcast the message with the nickname
-            console.log("Send private from "+nick+" to "+to, data);
+            console.log("Send private from "+_this.nick+" to "+to, data);
 
             io.sockets.socket(to).emit('privatein', {
                 from: socket.id,
-                name: nick,
+                name: _this.nick,
                 message: message
             });
-        });
     });
 
     //Someone presents himself
     socket.on('nick', function (new_nick) {
-        socket.get('nick', function(err, old_nick) {
-            
-            //can be set to false if any error check is not passed
-            var new_name_ok = true;
+        
+        //can be set to false if any error check is not passed
+        var new_name_ok = true;
 
-            if ( err ) {
-                console.error('Something wrong happened, user without nick');
+        //Is there any changes at all?
+        if ( _this.nick == new_nick ) {
+            new_name_ok = false;
+        }
+
+        //If the username exists already, don't change it
+        for ( contact in contacts ) {
+            if ( contacts[contact] == new_nick ) {
+                //contact already exists
                 new_name_ok = false;
             }
+        }
 
-            //Is there any changes at all?
-            if ( old_nick == new_nick ) {
-                new_name_ok = false;
-            }
+        if ( new_name_ok == false ) {
+            //reset old nick
+            socket.emit('nick', _this.nick);
+        } else {
 
-            //If the username exists already, don't change it
-            for ( contact in contacts ) {
-                if ( contacts[contact] == new_nick ) {
-                    //contact already exists
-                    new_name_ok = false;
-                }
-            }
+            old_nick = _this.nick;
 
-            if ( new_name_ok == false ) {
-                //reset old nick
-                socket.emit('nick', old_nick);
-            } else {
-                //store the new nick
-                socket.set('nick', new_nick, function(){
-                    nick = new_nick;
+            //store the new nick
+            _this.nick = new_nick;
 
-                    console.log(old_nick+ " is now known as " + new_nick);
+            console.log(old_nick+ " is now known as " + new_nick);
 
-                    //set the new name to the client
-                    socket.emit('nick', new_nick);
+            //set the new name to the client
+            socket.emit('nick', _this.nick);
 
-                    //Store in the client list
-                    contacts[socket.id] = new_nick;
+            //Store in the client list
+            contacts[socket.id] = new_nick;
 
-                    //Show that to the room
-                    io.sockets.emit('nickchange', {new_nick:new_nick, old_nick:old_nick});
+            //Show that to the room
+            io.sockets.emit('nickchange', {new_nick:new_nick, old_nick:old_nick});
 
-                    refreshContactList();
-                });
-            }
-        });
+            refreshContactList();
+        }
     });
 
     //User disconnects
