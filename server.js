@@ -17,7 +17,7 @@ function handler (req, res) {
     if (req.url.indexOf("/static/")==0) {
         var file = req.url;
 
-    } else if (req.url.indexOf("/ajax/rooms") == 0 ) {
+    } else if (req.url.indexOf("/ajax/rooms.json") == 0 ) {
         //Room list
         res.writeHead(200);
         res.write(JSON.stringify(rooms),encoding='utf8')

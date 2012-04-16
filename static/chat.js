@@ -30,6 +30,9 @@ var Chat = function(user_options) {
     //Set the nickname as soon as the connection is ready
     this.socket = io.connect('/'+this.options.room_name);
     this.socket.on('connect', function(){});
+    this.socket.on('disconnect', function(){
+        alert("Connection closed");
+    });
 
     //message sending function
     this.sendMessage = function(text) {

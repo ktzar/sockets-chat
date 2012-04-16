@@ -14,7 +14,7 @@ var Private = function (user_id, nick)
     //functions
     this.msg_received = function(message){
         var conversation = this.panel.find('.conversation');
-        conversation.html(conversation.html() + "<br/>" + message);
+        this.updateBox(message);
     };
 
     //Reduce window's height
@@ -44,6 +44,7 @@ var Private = function (user_id, nick)
         console.log('updateBox', text);
         var conversation = this.panel.find('.conversation');
         conversation.html(conversation.html()+"<br/>"+text);
+        conversation.scrollTop = conversation.scrollHeight;
     };
 
     //html template for the private chat window

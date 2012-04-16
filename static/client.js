@@ -71,16 +71,20 @@ function cleanText(text) {
     return $('<div/>').text(text).html();
 }
 
-//instantiate Chat class
-var chat = new Chat({
-    room_name:      prompt ("Room?"),
-    _cb_msg:        receiveMessage,
-    _cb_join:       userNew,
-    _cb_left:       userLeft,
-    _cb_list:       contactList,
-    _cb_nick:       nickSet,
-    _cb_nickchange: nickChange,
-    _cb_privatein:    privateIn
+var chat;
+$.getJSON('ajax/rooms.json', function(data) {
+    console.log(data);
+    //instantiate Chat class
+    chat = new Chat({
+        room_name:      prompt ("Room?\n"+data.join("\n")),
+        _cb_msg:        receiveMessage,
+        _cb_join:       userNew,
+        _cb_left:       userLeft,
+        _cb_list:       contactList,
+        _cb_nick:       nickSet,
+        _cb_nickchange: nickChange,
+        _cb_privatein:    privateIn
+    });
 });
 
 //onLoad
