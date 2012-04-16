@@ -14,9 +14,17 @@ var rooms = new Array('news', 'sports', 'romance', 'languages');
 function handler (req, res) {
 
     //Dump any existing file in the /static folder
-    if (req.url.substr(0,8) == "/static/") {
+    if (req.url.indexOf("/static/")==0) {
         var file = req.url;
-    }else{
+
+    } else if (req.url.indexOf("/ajax/rooms") == 0 ) {
+        //Room list
+        res.writeHead(200);
+        res.write(JSON.stringify(rooms),encoding='utf8')
+        res.end();
+        return;
+
+    } else {
         //Elsewhere, dump index.html
         var file = 'index.html';
     }
