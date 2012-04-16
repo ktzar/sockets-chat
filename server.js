@@ -111,16 +111,21 @@ var createChat = function(room_name){
             //can be set to false if any error check is not passed
             var new_name_ok = true;
 
+            //Not empty name
+            if ( new_nick == "" ) {
+                new_name_ok = false;
+            } else if ( _this.nick == new_nick ) {
             //Is there any changes at all?
-            if ( _this.nick == new_nick ) {
                 new_name_ok = false;
             }
 
-            //If the username exists already, don't change it
-            for ( contact in contacts ) {
-                if ( contacts[contact] == new_nick ) {
-                    //contact already exists
-                    new_name_ok = false;
+            if ( new_name_ok ) {
+                //If the username exists already, don't change it
+                for ( contact in contacts ) {
+                    if ( contacts[contact] == new_nick ) {
+                        //contact already exists
+                        new_name_ok = false;
+                    }
                 }
             }
 

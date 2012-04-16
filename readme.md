@@ -4,15 +4,16 @@ The main purpose of this project is to play with node.js and learn about it. Eve
 
 I plan to implement:
 
-- Rooms
-- Emoticons
-- Direct messages
+- Rooms (halfway)
+- Direct messages (done)
 - Logging
 - Registration
 - Popup windows
+- Emoticons
 
 To run the server execute 
 
 `$ node server.js`
 
 And then you can point your browser to `http://your_local_ip:1080`
+You can customise the port in the constants of server.js. TODO: accept a parameter with the port
