@@ -8,21 +8,23 @@ var app = require('http').createServer(handler)
 
 app.listen(SERVER_PORT);
 
+//Rooms that are available
+var rooms = new Array('News', 'Sports', 'Romance', 'Languages');
 
-var rooms = new Array('news', 'sports', 'romance', 'languages');
-
+//HTTP handler
 function handler (req, res) {
+
+    //Room list
+    if (req.url.indexOf("/ajax/rooms.json") == 0 ) {
+        res.writeHead(200, {'Content-Type': 'application/json'});
+        res.write(JSON.stringify(rooms),encoding='utf8')
+        res.end();
+        return;
+    }
 
     //Dump any existing file in the /static folder
     if (req.url.indexOf("/static/")==0) {
         var file = req.url;
-
-    } else if (req.url.indexOf("/ajax/rooms.json") == 0 ) {
-        //Room list
-        res.writeHead(200);
-        res.write(JSON.stringify(rooms),encoding='utf8')
-        res.end();
-        return;
 
     } else {
         //Elsewhere, dump index.html
@@ -153,12 +155,12 @@ var createChat = function(room_name){
     });
 };
 
+//Create chatrooms
 for ( room in rooms ) {
     createChat(rooms[room]);
 }
-
   
-
+//Debug memory usage every 10s
 setInterval(function(){
     console.log("Memory",util.inspect(process.memoryUsage()));
-}, 10000);
+}, 10*1000);

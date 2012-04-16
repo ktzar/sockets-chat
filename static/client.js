@@ -72,11 +72,21 @@ function cleanText(text) {
 }
 
 var chat;
-$.getJSON('ajax/rooms.json', function(data) {
-    console.log(data);
+$.getJSON('ajax/rooms.json', function(rooms) {
+    console.log(rooms);
+    var room;
+    //If there's only one chatroom, enter where automatically
+    if ( rooms.length == 1 ) {
+        room = rooms[0];
+    }else{
+        //TODO make this nicer. This is quite ugly, but works
+        while ( rooms.indexOf(room) == -1 ) {
+            room = prompt ("Room?\n"+rooms.join("\n"))
+        }
+    }
     //instantiate Chat class
     chat = new Chat({
-        room_name:      prompt ("Room?\n"+data.join("\n")),
+        room_name:      room,
         _cb_msg:        receiveMessage,
         _cb_join:       userNew,
         _cb_left:       userLeft,
@@ -92,6 +102,7 @@ $(function(){
     //ask for a name
     var name = null, i = 0;
 
+    //Send message to the room when clicking on the send button
     $('#bt_send').click(function(e){
         sendMessage();
     });
@@ -100,7 +111,7 @@ $(function(){
         if ( e.keyCode == 13 ) {
             sendMessage();
         }
-    }).focus(); //input field is focused on loading
+    }).focus(); //focus input field when loaded loading
 
     $('#bt_nick').click(function(){
         chat.setNick($('#nick').val());

@@ -3,6 +3,9 @@ var Chat = function(user_options) {
 
     var that = this;
 
+    //The current nick
+    var nick;
+
     //check for HTML5 Storage
     this.hasLocalStorage = function supports_html5_storage() {
       try {
@@ -46,7 +49,8 @@ var Chat = function(user_options) {
 
     //change nick 
     this.setNick = function(nick) {
-        that.socket.emit('nick', nick); 
+        this.nick = nick;
+        this.socket.emit('nick', nick); 
         if ( this.hasLocalStorage ) {
             console.log('store nick: ', nick);
             localStorage.setItem("nick", nick);
