@@ -73,6 +73,7 @@ function cleanText(text) {
 
 //instantiate Chat class
 var chat = new Chat({
+    room_name:      prompt ("Room?"),
     _cb_msg:        receiveMessage,
     _cb_join:       userNew,
     _cb_left:       userLeft,

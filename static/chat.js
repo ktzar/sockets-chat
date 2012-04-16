@@ -14,6 +14,7 @@ var Chat = function(user_options) {
 
     //default options
     this.options = {
+        room_name : "chat"
     };
 
     var callbacks = ['msg', 'join', 'left', 'list', 'nick', 'nickchange', 'privatein'];
@@ -27,7 +28,7 @@ var Chat = function(user_options) {
     }
 
     //Set the nickname as soon as the connection is ready
-    this.socket = io.connect();
+    this.socket = io.connect('/'+this.options.room_name);
     this.socket.on('connect', function(){});
 
     //message sending function

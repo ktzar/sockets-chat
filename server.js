@@ -8,6 +8,9 @@ var app = require('http').createServer(handler)
 
 app.listen(SERVER_PORT);
 
+
+var rooms = new Array('news', 'sports', 'romance', 'languages');
+
 function handler (req, res) {
 
     //Dump any existing file in the /static folder
@@ -32,17 +35,17 @@ function handler (req, res) {
 }
 
 
-var createChat = function(){
+//TODO put this in a module
+var createChat = function(room_name){
 
     var contacts = {};
     var user_count = 0;
 
-    var refreshContactList = function ()
-    {
-        io.sockets.emit('list', contacts);
-    }
+    var refreshContactList = function () {
+        room.emit('list', contacts);
+    };
 
-    return function (socket) {
+    var room = io.of('/'+room_name).on('connection', function (socket) {
         //If the client doesn't set any nickname it'll remain Anonymous
         var _this = this;
 
@@ -51,7 +54,7 @@ var createChat = function(){
         //Set nickname to the user
         socket.emit('nick', this.nick);
         //show to the room
-        io.sockets.emit('join', this.nick);
+        room.emit('join', this.nick);
 
         contacts[socket.id] = this.nick;
         refreshContactList();
@@ -63,7 +66,7 @@ var createChat = function(){
             }
             //Broadcast the message with the nickname
             console.log("Send ",_this.nick, data);
-            io.sockets.emit('msg', {nick:_this.nick,text:data});
+            room.emit('msg', {nick:_this.nick,text:data});
         });
 
         socket.on('private', function (data) {
@@ -85,7 +88,7 @@ var createChat = function(){
                 //Broadcast the message with the nickname
                 console.log("Send private from "+_this.nick+" to "+to, data);
 
-                io.sockets.socket(to).emit('privatein', {
+                room.socket(to).emit('privatein', {
                     from: socket.id,
                     name: _this.nick,
                     message: message
@@ -124,7 +127,7 @@ var createChat = function(){
                 //Store in the client list
                 contacts[socket.id] = new_nick;
                 //Show that to the room
-                io.sockets.emit('nickchange', {new_nick:new_nick, old_nick:old_nick});
+                room.emit('nickchange', {new_nick:new_nick, old_nick:old_nick});
                 refreshContactList();
             }
         });
@@ -135,16 +138,18 @@ var createChat = function(){
                 //delete this user from contact list
                 delete contacts[socket.id];
                 console.log(nick+" left");
-                io.sockets.emit('left', nick);
+                room.emit('left', nick);
                 refreshContactList();
             });
         });
-    };
+    });
 };
 
-//socket.io server
-io.sockets.on('connection', createChat() );
+for ( room in rooms ) {
+    createChat(rooms[room]);
+}
 
+  
 
 setInterval(function(){
     console.log("Memory",util.inspect(process.memoryUsage()));
