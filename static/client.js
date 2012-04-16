@@ -119,7 +119,10 @@ $(function(){
 
     $('#contactlist').on('dblclick', 'li', function(e){
         //TODO I'd like Private to have "static methods " to check if a window for a certain user exists
-        new Private($(this).attr('data-id'), $(this).find('.name').html());
+        var open_nick = $(this).find('.name').html();
+        if ( open_nick != chat.nick ) {
+            new Private($(this).attr('data-id'), open_nick);
+        }
     });
 
 });
