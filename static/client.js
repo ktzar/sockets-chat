@@ -72,7 +72,7 @@ function cleanText(text) {
 }
 
 var chat;
-$.getJSON('ajax/rooms.json', function(rooms) {
+$.getJSON('/ajax/rooms.json', function(rooms) {
     console.log(rooms);
     var room;
     //If there's only one chatroom, enter where automatically

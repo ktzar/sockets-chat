@@ -26,22 +26,25 @@ function handler (req, res) {
     if (req.url.indexOf("/static/")==0) {
         var file = req.url;
 
+        //Read the desired file and output it
+        fs.readFile(__dirname + '/'+file,
+            function (err, data) {
+                if (err) {
+                    res.writeHead(500);
+                    return res.end('Not found '+req.url);
+                }
+                res.writeHead(200);
+                res.end(data);
+            }
+        );
     } else {
-        //Elsewhere, dump index.html
-        var file = 'index.html';
+        //Elsewhere, redirect to the static page
+        res.writeHead(302, {
+            'Location': '/static/index.html'
+        });
+        res.end();
     }
 
-    //Read the desired file and output it
-    fs.readFile(__dirname + '/'+file,
-        function (err, data) {
-            if (err) {
-                res.writeHead(500);
-                return res.end('Not found '+req.url);
-            }
-            res.writeHead(200);
-            res.end(data);
-        }
-    );
 }
 
 
