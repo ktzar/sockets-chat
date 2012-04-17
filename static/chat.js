@@ -61,7 +61,9 @@ var Chat = function(user_options) {
     if (this.hasLocalStorage) {
         var nick = localStorage.getItem("nick");
         console.log('retrieve nick: ', nick);
-        this.setNick(nick);
+        if ( nick ) {
+            this.setNick(nick);
+        }
     }
 
     //configure callback
