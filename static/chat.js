@@ -4,7 +4,7 @@ var Chat = function(user_options) {
     var that = this;
 
     //The current nick
-    var nick;
+    this.nick = null;
 
     //check for HTML5 Storage
     this.hasLocalStorage = function supports_html5_storage() {
@@ -49,7 +49,6 @@ var Chat = function(user_options) {
 
     //change nick 
     this.setNick = function(nick) {
-        this.nick = nick;
         this.socket.emit('nick', nick); 
         if ( this.hasLocalStorage ) {
             console.log('store nick: ', nick);
@@ -82,6 +81,12 @@ var Chat = function(user_options) {
             );
         }
     }
+
+    //Internal callbacks process
+    //Store the current nick
+    this.socket.on('nick', function (new_nick) {
+        that.nick = new_nick;
+    });
 }
 
 
