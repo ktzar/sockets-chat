@@ -62,24 +62,27 @@ var createChat = function(room_name){
         //If the client doesn't set any nickname it'll remain Anonymous
         var _this = this;
 
-        this.nick = "Anonymous_"+user_count++;
+        var nick = "Anonymous_"+user_count++;
+        socket.set('nick', nick);
 
         //Set nickname to the user
-        socket.emit('nick', this.nick);
+        socket.emit('nick', nick);
         //show to the room
-        room.emit('join', this.nick);
+        room.emit('join', nick);
 
-        contacts[socket.id] = this.nick;
+        contacts[socket.id] = nick;
         refreshContactList();
 
-        socket.on('msg', function (data) {
-            if (data == undefined || data.length == 0 ) {
+        socket.on('msg', function (message) {
+            if (message == undefined || message.length == 0 ) {
                 console.log('Empty message');
                 return;
             }
             //Broadcast the message with the nickname
-            console.log("Send ",_this.nick, data);
-            room.emit('msg', {nick:_this.nick,text:data});
+            socket.get('nick', function (err, nick) {
+                console.log("Send ",nick, message);
+                room.emit('msg', {nick:nick,text:message});
+            });
         });
 
         socket.on('private', function (data) {
@@ -98,14 +101,16 @@ var createChat = function(room_name){
                 return;
             }
 
+            socket.get('nick', function (err, nick) {
                 //Broadcast the message with the nickname
-                console.log("Send private from "+_this.nick+" to "+to, data);
+                console.log("Send private from "+nick+" to "+to, data);
 
                 room.socket(to).emit('privatein', {
                     from: socket.id,
-                    name: _this.nick,
+                    name: nick,
                     message: message
                 });
+            });
         });
 
         //Someone presents himself
@@ -136,17 +141,19 @@ var createChat = function(room_name){
                 //reset old nick
                 socket.emit('nick', _this.nick);
             } else {
-                old_nick = _this.nick;
-                //store the new nick
-                _this.nick = new_nick;
-                console.log(old_nick+ " is now known as " + new_nick);
-                //set the new name to the client
-                socket.emit('nick', _this.nick);
-                //Store in the client list
-                contacts[socket.id] = new_nick;
-                //Show that to the room
-                room.emit('nickchange', {new_nick:new_nick, old_nick:old_nick});
-                refreshContactList();
+
+                socket.get('nick', function (err, old_nick) {
+                    //store the new nick
+                    socket.set('nick', new_nick);
+                    //set the new name to the client
+                    socket.emit('nick', new_nick);
+                    //Store in the client list
+                    contacts[socket.id] = new_nick;
+                    //Show that to the room
+                    room.emit('nickchange', {new_nick:new_nick, old_nick:old_nick});
+                    console.log(old_nick+ " is now known as " + new_nick);
+                    refreshContactList();
+                });
             }
         });
 
