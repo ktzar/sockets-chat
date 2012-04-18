@@ -31,10 +31,12 @@ function handler (req, res) {
             function (err, data) {
                 if (err) {
                     res.writeHead(500);
-                    return res.end('Not found '+req.url);
+                    res.end('Not found '+req.url);
+                } else {
+                    // returns MIME type for extension, or fallback, or octet-steam
+                    res.writeHead(200);
+                    res.end(data);
                 }
-                res.writeHead(200);
-                res.end(data);
             }
         );
     } else {
@@ -73,24 +75,26 @@ var createChat = function(room_name){
         contacts[socket.id] = nick;
         refreshContactList();
 
+        //Message to the Room
         socket.on('msg', function (message) {
             if (message == undefined || message.length == 0 ) {
                 console.log('Empty message');
                 return;
             }
-            //Broadcast the message with the nickname
+            //Get the nickname
             socket.get('nick', function (err, nick) {
                 console.log("Send ",nick, message);
+                //Broadcast the message with the nickname
                 room.emit('msg', {nick:nick,text:message});
             });
         });
 
+        //Event of a private message
         socket.on('private', function (data) {
             if (data == undefined || data.length == 0 ) {
                 console.log('Empty message');
                 return;
             }
-            console.log('private', data);
             var to      = data.to;
             var message = data.message;
 
