@@ -5,11 +5,14 @@ var app = require('http').createServer(handler)
 , io = require('socket.io').listen(app)
 , fs = require('fs')
 , util = require('util')
+, mime = require('./lib/mime')
+
 
 app.listen(SERVER_PORT);
 
 //Rooms that are available
 var rooms = new Array('News', 'Sports', 'Romance', 'Languages');
+
 
 //HTTP handler
 function handler (req, res) {
@@ -28,14 +31,16 @@ function handler (req, res) {
 
         //Read the desired file and output it
         fs.readFile(__dirname + '/'+file,
-            function (err, data) {
+            function (err, file_data) {
                 if (err) {
                     res.writeHead(500);
                     res.end('Not found '+req.url);
                 } else {
                     // returns MIME type for extension, or fallback, or octet-steam
-                    res.writeHead(200);
-                    res.end(data);
+                    var extension = file.substr(file.lastIndexOf('.'));
+                    var mime_type = mime.lookupExtension(extension);
+                    res.writeHead(200, {'Content-Type' : mime_type});
+                    res.end(file_data);
                 }
             }
         );
@@ -90,13 +95,13 @@ var createChat = function(room_name){
         });
 
         //Event of a private message
-        socket.on('private', function (data) {
-            if (data == undefined || data.length == 0 ) {
+        socket.on('private', function (message) {
+            if (message == undefined || message.length == 0 ) {
                 console.log('Empty message');
                 return;
             }
-            var to      = data.to;
-            var message = data.message;
+            var to      = message.to;
+            var message = message.message;
 
             //confirm that the user_id exists
             if ( typeof contacts[to] == "undefined" ) {
@@ -107,7 +112,7 @@ var createChat = function(room_name){
 
             socket.get('nick', function (err, nick) {
                 //Broadcast the message with the nickname
-                console.log("Send private from "+nick+" to "+to, data);
+                console.log("Send private from "+nick+" to "+to, message);
 
                 room.socket(to).emit('privatein', {
                     from: socket.id,
