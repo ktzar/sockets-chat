@@ -4,12 +4,13 @@ The main purpose of this project is to play with node.js and learn about it. Eve
 
 I plan to implement:
 
-- Rooms (halfway)
+- Rooms (done)
 - Direct messages (done)
 - Logging
 - Registration
-- Popup windows
+- Popup private windows
 - Emoticons
+- Blinking alerts in the title
 
 To run the server execute 
 
