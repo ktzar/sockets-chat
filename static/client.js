@@ -72,33 +72,41 @@ function cleanText(text) {
 }
 
 var chat;
-$.getJSON('/ajax/rooms.json', function(rooms) {
-    console.log(rooms);
-    var room;
-    //If there's only one chatroom, enter where automatically
-    if ( rooms.length == 1 ) {
-        room = rooms[0];
-    }else{
-        //TODO make this nicer. This is quite ugly, but works
-        while ( rooms.indexOf(room) == -1 ) {
-            room = prompt ("Room?\n"+rooms.join("\n"))
-        }
-    }
+
+function initChat(room) {
     //instantiate Chat class
     chat = new Chat({
         room_name:      room,
-        _cb_msg:        receiveMessage,
-        _cb_join:       userNew,
-        _cb_left:       userLeft,
-        _cb_list:       contactList,
-        _cb_nick:       nickSet,
-        _cb_nickchange: nickChange,
-        _cb_privatein:    privateIn
+         _cb_msg:        receiveMessage,
+         _cb_join:       userNew,
+         _cb_left:       userLeft,
+         _cb_list:       contactList,
+         _cb_nick:       nickSet,
+         _cb_nickchange: nickChange,
+         _cb_privatein:    privateIn
     });
-});
-
+}
 //onLoad
 $(function(){
+    //Load the rooms from the server
+    $.getJSON('/ajax/rooms.json', function(rooms) {
+        var room;
+        //If there's only one chatroom, enter where automatically
+        if ( rooms.length == 1 ) {
+            initChat(rooms[0]);
+        }else{
+            var room_list = $('#room_selector ul').html('');
+            for ( room in rooms ) {
+                room_list.append(function(_room_){
+                    return $("<li>"+_room_+"</li>").click(function(){
+                        initChat(_room_);
+                        $('#room_selector').remove();
+                    });
+                }(rooms[room]));
+            }
+        }
+    });
+
     //ask for a name
     var name = null, i = 0;
 
