@@ -74,6 +74,7 @@ function cleanText(text) {
 var chat;
 
 function initChat(room) {
+    $('h2.room').html('Room: '+room);
     //instantiate Chat class
     chat = new Chat({
         room_name:      room,
