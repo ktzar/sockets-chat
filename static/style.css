@@ -125,13 +125,33 @@ input {
     height:100%;
     z-index:9;
     background: rgba(0,0,0,0.5);
+    text-align: center;
 }
 #room_selector ul{
     position: absolute;
     top:30%;
-    width:350px;
+    left:30%;
+    width:40%;
     z-index:9;
     background: white;
     box-shadow:0px 0px 20px #000;
+    padding-left:0px;
+    list-style: none;
+}
+#room_selector ul li{
+    float:left;
+    width: 100px;
+    background:#ccc;
+    border-radius:5px;
+    margin:0.5em;
+    padding:0.5em;
+    cursor: pointer;
+    -webkit-transition: 0.5s all;
+    -moz-transition: 0.5s all;
+    -ms-transition: 0.5s all;
+    transition: 0.5s all;
+}
+#room_selector ul li:hover{
+    background: #eee;
 }
 

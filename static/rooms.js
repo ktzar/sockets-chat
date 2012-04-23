@@ -1,5 +1,5 @@
 var Rooms = function(cb_loadRoom){
-    var room_selector = jQuery('<div id="room_selector"><ul></ul></div>');
+    var room_selector = jQuery('<div id="room_selector"><ul><h2>Please choose a room</h2></ul></div>');
 
     //Load the rooms from the server
     $.getJSON('/ajax/rooms.json', function(rooms) {
@@ -8,7 +8,7 @@ var Rooms = function(cb_loadRoom){
         if ( rooms.length == 1 ) {
             cb_loadRoom(rooms[0]);
         }else{
-            var room_list = room_selector.find('ul').html('');
+            var room_list = room_selector.find('ul');
             for ( room in rooms ) {
                 room_list.append(function(_room_){
                     return $("<li>"+_room_+"</li>").click(function(){
