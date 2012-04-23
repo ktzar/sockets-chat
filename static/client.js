@@ -84,6 +84,7 @@ $.getJSON('/ajax/rooms.json', function(rooms) {
             room = prompt ("Room?\n"+rooms.join("\n"))
         }
     }
+    $('h2.room').html('Room: '+room);
     //instantiate Chat class
     chat = new Chat({
         room_name:      room,
