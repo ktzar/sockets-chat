@@ -88,24 +88,10 @@ function initChat(room) {
 }
 //onLoad
 $(function(){
-    //Load the rooms from the server
-    $.getJSON('/ajax/rooms.json', function(rooms) {
-        var room;
-        //If there's only one chatroom, enter where automatically
-        if ( rooms.length == 1 ) {
-            initChat(rooms[0]);
-        }else{
-            var room_list = $('#room_selector ul').html('');
-            for ( room in rooms ) {
-                room_list.append(function(_room_){
-                    return $("<li>"+_room_+"</li>").click(function(){
-                        initChat(_room_);
-                        $('#room_selector').remove();
-                    });
-                }(rooms[room]));
-            }
-        }
-    });
+
+    //initChat is the callback that will be
+    //called when a room is selected
+    var rooms = new Rooms( initChat );
 
     //ask for a name
     var name = null, i = 0;
@@ -132,5 +118,4 @@ $(function(){
             new Private($(this).attr('data-id'), open_nick);
         }
     });
-
 });
