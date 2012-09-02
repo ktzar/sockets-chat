@@ -44,7 +44,7 @@ var Private = function (user_id, nick)
         console.log('updateBox', text);
         var conversation = this.panel.find('.conversation');
         conversation.html(conversation.html()+"<br/>"+text);
-        conversation.scrollTop = conversation.scrollHeight;
+        conversation[0].scrollTop = conversation[0].scrollHeight;
     };
 
     //html template for the private chat window
