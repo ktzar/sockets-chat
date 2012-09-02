@@ -11,12 +11,6 @@ var Private = function (user_id, nick)
     this.user_id = user_id;
     this.nick = nick;
 
-    //functions
-    this.msg_received = function(message){
-        var conversation = this.panel.find('.conversation');
-        this.updateBox(message);
-    };
-
     //Reduce window's height
     this.minimise = function(){
         this.panel.addClass('minimised');
