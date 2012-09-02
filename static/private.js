@@ -30,6 +30,7 @@ var Private = function (user_id, nick)
 
     //Close the window and remove references in the DOM
     this.close = function(){
+        privateEnd(this.user_id);
         delete private_windows[this.user_id];
         this.panel.remove();
     }
@@ -40,6 +41,10 @@ var Private = function (user_id, nick)
         conversation.html(conversation.html()+"<br/>"+text);
         conversation[0].scrollTop = conversation[0].scrollHeight;
     };
+
+    this.peerClosed = function() {
+        this.updateBox('<i>Peer closed the conversation</i>');
+    }
 
     //html template for the private chat window
     this.panel = jQuery(

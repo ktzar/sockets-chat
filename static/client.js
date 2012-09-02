@@ -36,6 +36,17 @@ function privateIn(data) {
     private_windows[data.from].incomingMessage(cleanText(data.message));
 }
 
+//Incoming private message
+function privateEnd(data) {
+    console.log('privateEnd', data);
+    //TODO I'd like Private to have "static methods " to check if a window for a certain user exists
+    if ( typeof private_windows[data.from] == "undefined" ) {
+        //unknown chat
+        return;
+    }
+    private_windows[data.from].peerClosed();
+}
+
 //Called when a user appears or leaves the room
 function contactList(contacts) {
     console.log('contactList', contacts);
@@ -67,6 +78,10 @@ function sendPrivate (to, message) {
     chat.sendPrivate(to, message);
 }
 
+function privateEnd (from) {
+    chat.privateEnd(from);
+}
+
 function cleanText(text) {
     return $('<div/>').text(text).html();
 }
@@ -84,7 +99,8 @@ function initChat(room) {
          _cb_list:       contactList,
          _cb_nick:       nickSet,
          _cb_nickchange: nickChange,
-         _cb_privatein:    privateIn
+         _cb_privatein:  privateIn,
+         _cb_privateend: privateEnd
     });
 }
 //onLoad

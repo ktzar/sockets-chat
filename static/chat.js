@@ -44,8 +44,12 @@ var Chat = function(user_options) {
 
     //private message sending function
     this.sendPrivate = function(to, message) {
-        that.socket.emit('private', {to:to, message:message}); 
+        that.socket.emit('private', {'to':to, 'message':message}); 
     };
+
+    this.privateEnd = function(to) {
+        that.socket.emit('privateend', {'to':to});
+    }
 
     //change nick 
     this.setNick = function(nick) {
@@ -81,6 +85,9 @@ var Chat = function(user_options) {
             );
         }
     }
+    this.socket.on('message', function (msg) {
+      console.log('debug', msg);
+    });
 
     //Internal callbacks process
     //Store the current nick

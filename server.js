@@ -111,14 +111,34 @@ var createChat = function(room_name){
             }
 
             socket.get('nick', function (err, nick) {
-                //Broadcast the message with the nickname
+                //Send the message to the user
                 console.log("Send private from "+nick+" to "+to, message);
-
                 room.socket(to).emit('privatein', {
                     from: socket.id,
                     name: nick,
                     message: message
                 });
+            });
+        });
+
+        //Event of closing a private message
+        socket.on('privateend', function (message) {
+            if (message == undefined || message.length == 0 ) {
+                console.log('Empty message');
+                return;
+            }
+
+            var to      = message.to;
+
+            //confirm that the user_id exists
+            if ( typeof contacts[to] == "undefined" ) {
+                console.log('private end to unexisting user', to, contacts);
+                return;
+            }
+
+            socket.get('nick', function (err, nick) {
+                console.log("Close private from "+nick+" to "+to);
+                room.socket(to).emit('privateend', { from: socket.id });
             });
         });
 
