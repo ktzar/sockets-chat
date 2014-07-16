@@ -1,3 +1,10 @@
+//Function that will be called when a new message arrives in the room
+function updateBox(text) {
+    $('#output').html($('#output').html()+"<div class='message'>"+text+"</div>");
+    output = $('#output')[0];
+    output.scrollTop = output.scrollHeight;
+}
+
 //Add the incoming text in the textarea and keep it scrolled down
 function receiveMessage(message) {
     //escape the text
@@ -44,13 +51,6 @@ function contactList(contacts) {
         console.log( 'adding ', contact);
         $('#contactlist ul').append('<li data-id="'+contact+'"><i class="icon-user"></i><span class="name">'+contacts[contact]+'</span></li>');
     }
-}
-
-//Function that will be called when a new message arrives in the room
-function updateBox (text) {
-    $('#output').html($('#output').html()+"<div class='message'>"+text+"</div>");
-    output = $('#output')[0];
-    output.scrollTop = output.scrollHeight;
 }
 
 
