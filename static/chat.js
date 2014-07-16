@@ -37,25 +37,6 @@ var Chat = function(user_options) {
         alert("Connection closed");
     });
 
-    //message sending function
-    this.sendMessage = function(text) {
-        that.socket.emit('msg', text); 
-    };
-
-    //private message sending function
-    this.sendPrivate = function(to, message) {
-        that.socket.emit('private', {to:to, message:message}); 
-    };
-
-    //change nick 
-    this.setNick = function(nick) {
-        this.socket.emit('nick', nick); 
-        if ( this.hasLocalStorage ) {
-            console.log('store nick: ', nick);
-            localStorage.setItem("nick", nick);
-        }
-    };
-
     //Set the stored nick if it's been stored
     if (this.hasLocalStorage) {
         var nick = localStorage.getItem("nick");
@@ -89,4 +70,23 @@ var Chat = function(user_options) {
     });
 }
 
+
+//message sending function
+Chat.prototype.sendMessage = function(text) {
+    that.socket.emit('msg', text); 
+};
+
+//private message sending function
+Chat.prototype.sendPrivate = function(to, message) {
+    that.socket.emit('private', {to:to, message:message}); 
+};
+
+//change nick 
+Chat.prototype.setNick = function(nick) {
+    this.socket.emit('nick', nick); 
+    if ( this.hasLocalStorage ) {
+        console.log('store nick: ', nick);
+        localStorage.setItem("nick", nick);
+    }
+};
 
