@@ -11,47 +11,6 @@ var Private = function (user_id, nick)
     this.user_id = user_id;
     this.nick = nick;
 
-    //Reduce window's height
-    this.minimise = function(){
-        this.panel.addClass('minimised');
-    }
-
-    //Restore window's height
-    this.restore = function(){
-        this.panel.removeClass('minimised');
-    }
-
-    //Incoming message
-    this.incomingMessage = function(text) {
-        console.log(text);
-        this.updateBox("<span class='nick'>"+this.nick+": </span><span class='text'>"+text+"</span>");
-                
-    }
-
-    //Close the window and remove references in the DOM
-    this.close = function(){
-        delete private_windows[this.user_id];
-        this.panel.remove();
-    }
-
-    this.updateBox = function(text) {
-        console.log('updateBox', text);
-        var conversation = this.panel.find('.conversation');
-        conversation.html(conversation.html()+"<br/>"+text);
-        conversation[0].scrollTop = conversation[0].scrollHeight;
-    };
-
-    //html template for the private chat window
-    this.panel = jQuery(
-'<div class="private" data-user="'+this.user_id+'">'+
-'   <h2>Chat with <span class="username">'+this.nick+'</span>'+
-'       <i data-action="close" class="icon-remove">&nbsp;</i>'+
-'       <i data-action="minimise" class="icon-chevron-down">&nbsp;</i>'+
-'       <i data-action="restore" class="icon-chevron-up">&nbsp;</i>'+
-'</h2>'+
-'   <div class="conversation"></div>'+
-'   <input type="text"></div>'+
-'</div>');
 
     private_windows[user_id] = this;
 
@@ -100,9 +59,53 @@ var Private = function (user_id, nick)
     }
     return true;
 }
+
+/* Not in the prototype */
 Private.getPrivate = function (from) {
     if ( typeof private_windows[from] === "undefined" ) {
         return false;
     }
     return private_windows[from];
 }
+
+//Reduce window's height
+Private.prototype.minimise = function(){
+    this.panel.addClass('minimised');
+}
+
+//Restore window's height
+Private.prototype.restore = function(){
+    this.panel.removeClass('minimised');
+}
+
+//Incoming message
+Private.prototype.incomingMessage = function(text) {
+    console.log(text);
+    this.updateBox("<span class='nick'>"+this.nick+": </span><span class='text'>"+text+"</span>");
+            
+}
+
+//Close the window and remove references in the DOM
+Private.prototype.close = function(){
+    delete private_windows[this.user_id];
+    this.panel.remove();
+}
+
+Private.prototype.updateBox = function(text) {
+    console.log('updateBox', text);
+    var conversation = this.panel.find('.conversation');
+    conversation.html(conversation.html()+"<br/>"+text);
+    conversation[0].scrollTop = conversation[0].scrollHeight;
+};
+
+//html template for the private chat window
+Private.prototype.panel = jQuery(
+'<div class="private" data-user="'+this.user_id+'">'+
+'   <h2>Chat with <span class="username">'+this.nick+'</span>'+
+'       <i data-action="close" class="icon-remove">&nbsp;</i>'+
+'       <i data-action="minimise" class="icon-chevron-down">&nbsp;</i>'+
+'       <i data-action="restore" class="icon-chevron-up">&nbsp;</i>'+
+'   </h2>'+
+'   <div class="conversation"></div>'+
+'   <input type="text"></div>'+
+'</div>');
