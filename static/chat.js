@@ -36,6 +36,11 @@ var Chat = function(user_options) {
     this.socket.on('disconnect', function(){
         alert("Connection closed");
     });
+    //Internal callbacks process
+    //Store the current nick
+    this.socket.on('nick', function (new_nick) {
+        that.nick = new_nick;
+    });
 
     //Set the stored nick if it's been stored
     if (this.hasLocalStorage) {
@@ -62,12 +67,6 @@ var Chat = function(user_options) {
             );
         }
     }
-
-    //Internal callbacks process
-    //Store the current nick
-    this.socket.on('nick', function (new_nick) {
-        that.nick = new_nick;
-    });
 }
 
 
