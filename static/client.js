@@ -35,12 +35,11 @@ function nickChange(nicks) {
 //Incoming private message
 function privateIn(data) {
     console.log('privateIn', data);
-    //TODO I'd like Private to have "static methods " to check if a window for a certain user exists
-    if ( typeof private_windows[data.from] == "undefined" ) {
-        //new chat, we have to create it
-        new Private(data.from, data.name);
+    var privateChat = Private.getPrivate(data.from);
+    if (!privateChat) {
+        privateChat = new Private(data.from, data.name);
     }
-    private_windows[data.from].incomingMessage(cleanText(data.message));
+    privateChat.incomingMessage(cleanText(data.message));
 }
 
 //Called when a user appears or leaves the room

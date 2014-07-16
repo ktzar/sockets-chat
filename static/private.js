@@ -100,3 +100,9 @@ var Private = function (user_id, nick)
     }
     return true;
 }
+Private.getPrivate = function (from) {
+    if ( typeof private_windows[from] === "undefined" ) {
+        return false;
+    }
+    return private_windows[from];
+}
