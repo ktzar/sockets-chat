@@ -72,12 +72,12 @@ var Chat = function(user_options) {
 
 //message sending function
 Chat.prototype.sendMessage = function(text) {
-    that.socket.emit('msg', text); 
+    this.socket.emit('msg', text); 
 };
 
 //private message sending function
 Chat.prototype.sendPrivate = function(to, message) {
-    that.socket.emit('private', {to:to, message:message}); 
+    this.socket.emit('private', {to:to, message:message}); 
 };
 
 //change nick 
